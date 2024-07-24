@@ -5,6 +5,7 @@ const XLSX = require('xlsx');
 
 
 
+
      // Função para aguardar o overlay de "aguarde" desaparecer
      async function waitForOverlayToDisappear(page) {
         const overlaySelector = '#overlay';
@@ -16,7 +17,7 @@ const XLSX = require('xlsx');
             console.log('Overlay desapareceu.');
             
         } else {
-            console.log('Overlay não encontrado seguindo o fluxo');
+            console.log('Overlay não encontrado seguindo o fluxo s');
         }
     }
 
