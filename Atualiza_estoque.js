@@ -8,7 +8,7 @@ const XLSX = require('xlsx');
 
      // Função para aguardar o overlay de "aguarde" desaparecer
      async function waitForOverlayToDisappear(page) {
-        const overlaySelector = '#overlay';
+        const overlaySelector = '#progress';    
         const overlayElemento = await page.$(overlaySelector);
 
         if(overlayElemento) {
@@ -17,7 +17,7 @@ const XLSX = require('xlsx');
             console.log('Overlay desapareceu.');
             
         } else {
-            console.log('Overlay não encontrado seguindo o fluxo s');
+            console.log('Overlay não encontrado seguindo o fluxo');
         }
     }
 
@@ -44,6 +44,19 @@ const XLSX = require('xlsx');
         return dados;
     }
 
+    function testeTabela() {
+        
+        localArquivo = '../planilha.xlsx';
+        const dados = GetDadosTabela(localArquivo);
+        
+        console.log(dados);
+
+        for( let i = 0; i < dados.length; i++){
+            const item = dados[i];
+            console.log(item.Nivel);
+        }
+    }
+
 
     async function AtualizaEstoque() {
 
@@ -52,10 +65,8 @@ const XLSX = require('xlsx');
         
         console.log(dados);
         
-       /*  const data = GetDadosTabela(localArquivo); */
-
-
-      
+        const data = GetDadosTabela(localArquivo);
+        
         
         /* dados.forEach((item,Index) => {
             console.log(`Linha ${rowIndex + 1}:`);
@@ -63,10 +74,13 @@ const XLSX = require('xlsx');
               console.log(`  Coluna ${header}: ${row[header]}`);
             });
           });  */
+
+      
+        
        
         //const values = fs.readFileSync('../valoresTeste.txt','utf-8').split('\n');
 
-       /*  const opcoesInicio = { headless: false, args: ['--start-maximized'] };
+        const opcoesInicio = { headless: false, args: ['--start-maximized'] };
          
         
         console.log('Iniciando Puppeteer com as opções:', opcoesInicio);
@@ -95,12 +109,14 @@ const XLSX = require('xlsx');
         await new Promise(resolve => setTimeout(resolve, 2000));
 
         try {
-            const codigo_Estagio_Baixa =  'input[name="codigo_estagio_baixa."]';
+           /*  const codigo_Estagio_Baixa =  'input[name="codigo_estagio_baixa."]';
             await page.waitForSelector(codigo_Estagio_Baixa);
-            console.log('Campo código de baixa encontrado.');
-        
+            console.log('Campo código de baixa encontrado.'); */
+            data.forEach((item, index) => {
+
+            });
             await new Promise(resolve => setTimeout(resolve, 2000));
-            await page.type(codigo_Estagio_Baixa, '85');
+            await page.type();
 
         } catch (error) {
             console.error('Erro ao inserir o valor "85" ', error);
@@ -168,7 +184,8 @@ const XLSX = require('xlsx');
                 await dialog.accept();
             });
             
-        } */
+        }
     }
 
-    AtualizaEstoque().catch(console.error);    
+ // AtualizaEstoque().catch(console.error);    
+   testeTabela();
