@@ -165,23 +165,20 @@ const XLSX = require('xlsx');
 
                 console.log(item.Quantidade);
                 await page.type(campo_quantidade, String(item.Quantidade));
+                page.keyboard.press('Enter');
                 await new Promise(resolve => setTimeout(resolve, 2000));
                 waitForOverlayToDisappear(page);
 
-                try{console.log(item.Confirmacao);
+                console.log(item.Confirmacao);
                 await page.type(campo_confirmacao, 'S');
-                page.keyboard.press('Tab');
+                page.keyboard.press('Enter');
                 await new Promise(resolve => setTimeout(resolve, 2000));
-                waitForOverlayToDisappear(page);
 
                 page.on('dialog', async dialog => {
                     console.log(dialog.message());
+                    console.log('dialogo aceito');
                     await dialog.accept();
                 });
-
-                } catch (error) {
-                    console.error('Erro ao inserir o valor ', error);
-                }
             }
 
         } catch (error) {
