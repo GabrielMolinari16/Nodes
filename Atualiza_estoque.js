@@ -121,6 +121,12 @@ const XLSX = require('xlsx');
             const campo_quantidade = 'input[name="quantidade."]';
             const campo_confirmacao = 'input[name="confirma."]';
 
+            page.on('dialog', async dialog => {
+                console.log(dialog.message());
+                console.log('dialogo aceito');
+                await dialog.accept();
+            });
+
             for( let i = 0; i < dados.length; i++){
                 const item = dados[i];
                 
@@ -172,13 +178,7 @@ const XLSX = require('xlsx');
                 console.log(item.Confirmacao);
                 await page.type(campo_confirmacao, 'S');
                 page.keyboard.press('Enter');
-                await new Promise(resolve => setTimeout(resolve, 2000));
-
-                page.on('dialog', async dialog => {
-                    console.log(dialog.message());
-                    console.log('dialogo aceito');
-                    await dialog.accept();
-                });
+                await new Promise(resolve => setTimeout(resolve, 4000));
             }
 
         } catch (error) {
