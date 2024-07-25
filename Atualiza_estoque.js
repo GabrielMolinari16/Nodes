@@ -112,11 +112,12 @@ const XLSX = require('xlsx');
            /*  const codigo_Estagio_Baixa =  'input[name="codigo_estagio_baixa."]';
             await page.waitForSelector(codigo_Estagio_Baixa);
             console.log('Campo código de baixa encontrado.'); */
-            data.forEach((item, index) => {
-
-            });
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            await page.type();
+            for( let i = 0; i < dados.length; i++){
+                const item = dados[1];
+                
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                await page.type();
+            };
 
         } catch (error) {
             console.error('Erro ao inserir o valor "85" ', error);
