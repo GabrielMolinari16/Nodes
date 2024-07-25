@@ -42,6 +42,7 @@ const XLSX = require('xlsx');
 
         const dados = XLSX.utils.sheet_to_json(sheet);
         return dados;
+        
     }
 
 
