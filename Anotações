@@ -1,0 +1,17 @@
+Como organizar as posições nos arrays para adequar a tela 
+
+Nivel, Grupo, Subgrupo, Cor/item, Deposito, Lote, Quantidade que vai ser atualizado o estoque,
+confirmação "S".
+
+Obs.: Cada virgila representa um Enter.
+
+Identificação dos campos (Name): 
+
+Nivel: nivel.
+Grupo: grupo.
+Subgrupo: subgrupo.
+Cor/item: item.
+Deposito: cod_deposito.
+Lote: lote.
+Quantidade: confirma.
+

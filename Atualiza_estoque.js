@@ -36,44 +36,34 @@ const XLSX = require('xlsx');
         }
 
     function GetDadosTabela(Caminho_arquivo) {
-        const workbook = XLSX.readFile(Caminho_arquivo);
+        const workbook = XLSX.readFile(localArquivo);
         const sheetName = workbook.SheetNames[0];
-        const sheet = workbook.Sheets['Planilha1'];
-
+        const sheet = workbook.Sheets[sheetName];
+    
         const dados = XLSX.utils.sheet_to_json(sheet);
         return dados;
-        
     }
 
 
     async function AtualizaEstoque() {
 
-        
         localArquivo = '../planilha.xlsx';
+        GetDadosTabela(localArquivo)
+        
+        console.log(dados);
+        
        /*  const data = GetDadosTabela(localArquivo); */
 
-        const workbook = XLSX.readFile(localArquivo);
-        const sheetName = workbook.SheetNames[0];
-        const sheet = workbook.Sheets[sheetName];
 
-        const dados = XLSX.utils.sheet_to_json(sheet);
-        const headers = Object.keys(dados[0]);
-
-        dados.forEach((row, rowIndex) => {
+      
+        
+        /* dados.forEach((item,Index) => {
             console.log(`Linha ${rowIndex + 1}:`);
             headers.forEach((header) => {
               console.log(`  Coluna ${header}: ${row[header]}`);
             });
-          });
-
-    /*     const linha1Coluna1 = dados[0]['A1'];
-        console.log('ate aqui tudo certo');
-        console.log(linha1Coluna1);
- */
-        /* const headers = Object.keys(dados[0]);
-        console.log(`Linha 1, ${headers[0]}: ${dados[0][headers[0]]}`);
-        console.log(`Linha 1, ${headers[1]}: ${dados[0][headers[1]]}`); */
-
+          });  */
+       
         //const values = fs.readFileSync('../valoresTeste.txt','utf-8').split('\n');
 
        /*  const opcoesInicio = { headless: false, args: ['--start-maximized'] };
