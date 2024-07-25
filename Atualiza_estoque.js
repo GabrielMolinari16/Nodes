@@ -24,11 +24,11 @@ const XLSX = require('xlsx');
     async function setaLogin(page){
         const usernameSelector = 'input[name="box1:usuario_tela."]';
         await page.waitForSelector(usernameSelector);
-        await page.type(usernameSelector, 'DIVERO01');       
+        await page.type(usernameSelector, 'MATHEUS');       
         
         const passwordSelector = 'input[name="box1:senha_tela."]';
         await page.waitForSelector(passwordSelector);
-        await page.type(passwordSelector, '1234');
+        await page.type(passwordSelector, 'matteus');
         
         await new Promise(resolve => setTimeout(resolve, 2000));
 
@@ -63,9 +63,9 @@ const XLSX = require('xlsx');
         localArquivo = '../planilha.xlsx';
         GetDadosTabela(localArquivo)
         
-        console.log(dados);
         
-        const data = GetDadosTabela(localArquivo);
+        const dados = GetDadosTabela(localArquivo);
+        console.log(dados);
         
         
         /* dados.forEach((item,Index) => {
@@ -112,18 +112,83 @@ const XLSX = require('xlsx');
            /*  const codigo_Estagio_Baixa =  'input[name="codigo_estagio_baixa."]';
             await page.waitForSelector(codigo_Estagio_Baixa);
             console.log('Campo código de baixa encontrado.'); */
+            const campo_nivel = 'input[name="nivel."]';
+            const campo_grupo = 'input[name="grupo."]';
+            const campo_subgrupo = 'input[name="subgrupo."]';
+            const campo_item = 'input[name="item."]';
+            const campo_deposito = 'input[name="cod_deposito."]';
+            const campo_lote = 'input[name="lote."]';
+            const campo_quantidade = 'input[name="quantidade."]';
+            const campo_confirmacao = 'input[name="confirma."]';
+
             for( let i = 0; i < dados.length; i++){
-                const item = dados[1];
+                const item = dados[i];
                 
+                waitForOverlayToDisappear(page);
                 await new Promise(resolve => setTimeout(resolve, 2000));
-                await page.type();
-            };
+                
+                console.log(item.Nivel);
+                await page.type(campo_nivel, String(item.Nivel));
+                page.keyboard.press('Enter');
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                waitForOverlayToDisappear(page);
+                
+                console.log(item.Grupo);
+                await page.type(campo_grupo, String(item.Grupo));
+                page.keyboard.press('Enter');
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                waitForOverlayToDisappear(page);
+               
+                console.log(item.Subgrupo);
+                await page.type(campo_subgrupo, String(item.Subgrupo));
+                page.keyboard.press('Enter');
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                waitForOverlayToDisappear(page);
+
+                console.log(item.Item);
+                await page.type(campo_item, String(item.Item));
+                page.keyboard.press('Enter');
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                waitForOverlayToDisappear(page);
+
+                console.log(item.Deposito);
+                await page.type(campo_deposito, String(item.Deposito));
+                page.keyboard.press('Enter');
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                waitForOverlayToDisappear(page);
+
+                console.log(item.Lote);
+                await page.type(campo_lote, String(item.Lote));
+                page.keyboard.press('Enter');
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                waitForOverlayToDisappear(page);
+
+                console.log(item.Quantidade);
+                await page.type(campo_quantidade, String(item.Quantidade));
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                waitForOverlayToDisappear(page);
+
+                try{console.log(item.Confirmacao);
+                await page.type(campo_confirmacao, 'S');
+                page.keyboard.press('Tab');
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                waitForOverlayToDisappear(page);
+
+                page.on('dialog', async dialog => {
+                    console.log(dialog.message());
+                    await dialog.accept();
+                });
+
+                } catch (error) {
+                    console.error('Erro ao inserir o valor ', error);
+                }
+            }
 
         } catch (error) {
-            console.error('Erro ao inserir o valor "85" ', error);
+            console.error('Erro ao inserir o valor ', error);
         }
 
-        for (let i = 0; i <= 3; i++) {
+       /*  for (let i = 0; i <= 3; i++) {
             await new Promise(resolve => setTimeout(resolve, 2000));
             await waitForOverlayToDisappear(page);
             
@@ -185,8 +250,8 @@ const XLSX = require('xlsx');
                 await dialog.accept();
             });
             
-        }
+        } */
     }
 
- // AtualizaEstoque().catch(console.error);    
-   testeTabela();
+     AtualizaEstoque().catch(console.error);    
+   //testeTabela();

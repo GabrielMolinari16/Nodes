@@ -13,5 +13,6 @@ Subgrupo: subgrupo.
 Cor/item: item.
 Deposito: cod_deposito.
 Lote: lote.
-Quantidade: confirma.
+Quantidade: quantidade.
+Confirmacao: confirma.
 
