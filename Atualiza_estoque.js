@@ -14,7 +14,7 @@ const XLSX = require('xlsx');
             console.log('Overlay desapareceu.');
             
         } else {
-            console.log('Overlay não encontrado seguindo o fluxo');
+           // console.log('Overlay não encontrado seguindo o fluxo');
         }
     }
 
@@ -100,7 +100,9 @@ const XLSX = require('xlsx');
                 waitForOverlayToDisappear(page);
                 await new Promise(resolve => setTimeout(resolve, 2000));
                 
-                console.log(item.Nivel);
+
+                console.log('--------------------------------------------------');
+                //console.log(item.Nivel);
                 await page.type(campo_nivel, String(item.Nivel));
                 page.keyboard.press('Enter');
                 await new Promise(resolve => setTimeout(resolve, 2000));
@@ -112,7 +114,7 @@ const XLSX = require('xlsx');
                 await new Promise(resolve => setTimeout(resolve, 2000));
                 waitForOverlayToDisappear(page);
                
-                console.log(item.Subgrupo);
+                //console.log(item.Subgrupo);
                 await page.type(campo_subgrupo, String(item.Subgrupo));
                 page.keyboard.press('Enter');
                 await new Promise(resolve => setTimeout(resolve, 2000));
@@ -124,28 +126,28 @@ const XLSX = require('xlsx');
                 await new Promise(resolve => setTimeout(resolve, 2000));
                 waitForOverlayToDisappear(page);
 
-                console.log(item.Deposito);
+                //console.log(item.Deposito);
                 await page.type(campo_deposito, String(item.Deposito));
                 page.keyboard.press('Enter');
                 await new Promise(resolve => setTimeout(resolve, 2000));
                 waitForOverlayToDisappear(page);
 
-                console.log(item.Lote);
+                //console.log(item.Lote);
                 await page.type(campo_lote, String(item.Lote));
                 page.keyboard.press('Enter');
                 await new Promise(resolve => setTimeout(resolve, 2000));
                 waitForOverlayToDisappear(page);
 
-                console.log(item.Quantidade);
+                console.log('Quantidade: ', item.Quantidade);
                 await page.type(campo_quantidade, String(item.Quantidade));
                 page.keyboard.press('Enter');
                 await new Promise(resolve => setTimeout(resolve, 2000));
                 waitForOverlayToDisappear(page);
 
-                console.log(item.Confirmacao);
+               // console.log(item.Confirmacao);
                 await page.type(campo_confirmacao, 'S');
                 page.keyboard.press('Enter');
-                await new Promise(resolve => setTimeout(resolve, 4000));
+                await new Promise(resolve => setTimeout(resolve, 2000));
             }
 
         } catch (error) {
