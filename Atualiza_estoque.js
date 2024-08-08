@@ -90,11 +90,14 @@ const XLSX = require('xlsx');
 
             page.on('dialog', async dialog => {
                 console.log(dialog.message());
-                console.log('dialogo aceito');
-                if (dialog.message === 'ATENÇÃO! Produto não cadastrado.') {
+                if (dialog.message() === 'ATENÇÃO! Produto não cadastrado.') {
                     console.log('Ocorreu um erro. Interrompendo a execução do codigo');
-                    process.exit(1);
+                    process.exit(1); // aqui o processo fecha a janela e tudo mas mantem o cmd
+                                     // pesquisar como apenas pausar para nao fechar o navegador
                 };
+
+                
+                console.log('dialogo aceito');
                 await dialog.accept();
             });
 
