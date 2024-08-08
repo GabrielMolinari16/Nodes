@@ -96,8 +96,6 @@ const XLSX = require('xlsx');
                     process.exit(1);
                 };
                 await dialog.accept();
-
-
             });
 
             for( let i = 0; i < dados.length; i++){
