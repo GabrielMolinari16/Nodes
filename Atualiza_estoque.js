@@ -91,7 +91,7 @@ const XLSX = require('xlsx');
             page.on('dialog', async dialog => {
                 console.log(dialog.message());
                 console.log('dialogo aceito');
-                if (dialog.message == 'ATENÇÃO! Produto não cadastrado.') {
+                if (dialog.message === 'ATENÇÃO! Produto não cadastrado.') {
                     console.log('Ocorreu um erro. Interrompendo a execução do codigo');
                     process.exit(1);
                 };
@@ -154,6 +154,7 @@ const XLSX = require('xlsx');
                 await new Promise(resolve => setTimeout(resolve, 2000));
             }
 
+            process.exit(0);
         } catch (error) {
             console.error('Erro ao inserir o valor ', error);
         }
