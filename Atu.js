@@ -58,7 +58,6 @@ async function Atualiza_estoque_deposito_1() {
     // Ajustando o site com o tamanho da tela
     await page.setViewport({width: 1370, height: 1024});
 
-    // fileURL =  `file://${path.join(__dirname, 'index.html')}`;
     fileURL =  `https://divero.systextil.com.br/systextil/`;
     await page.goto(fileURL);
 
@@ -106,12 +105,12 @@ async function Atualiza_estoque_deposito_1() {
         for( let i = 0; i < dados.length; i++){
             const item = dados[i];
 
-            page.on('dialog', async dialog => {
-                console.log(dialog.message());                
-                console.log('dialogo aceito');
-                codigos_alerta.push(String(item)); 
-                await dialog.accept();
-            });
+            // page.on('dialog', async dialog => {
+            //     console.log(dialog.message());                
+            //     console.log('dialogo aceito');
+            //     codigos_alerta.push(String(item)); 
+            //     await dialog.accept();
+            // });
             
             waitForOverlayToDisappear(page);
             await new Promise(resolve => setTimeout(resolve, 2000));
