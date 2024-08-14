@@ -18,8 +18,9 @@ const XLSX = require('xlsx');
         }
     }
 
-    async function wait_2_segundos(){
-        await new Promise(resolve => setTimeout(resolve, 2000));
+    async function wait_a_moment(tempo) {
+        tempo_ok = tempo * 1000;
+        await new Promise(resolve => setTimeout(resolve, tempo_ok));
     }
 
     async function setaLogin(page){
@@ -31,7 +32,7 @@ const XLSX = require('xlsx');
         await page.waitForSelector(passwordSelector);
         await page.type(passwordSelector, 'matteus');
         
-        wait_2_segundos();
+       wait_a_moment(5);
 
         await page.keyboard.press('F9');
         }
@@ -66,19 +67,19 @@ const XLSX = require('xlsx');
         fileURL =  `https://divero.systextil.com.br/systextil/`;
         await page.goto(fileURL);
 
-        wait_2_segundos();
+        await new Promise(resolve => setTimeout(resolve, 2000));
         
         await setaLogin(page);
         
         await waitForOverlayToDisappear(page);
 
-        wait_2_segundos();       
+        await new Promise(resolve => setTimeout(resolve, 2000));       
        
         await page.keyboard.type('estq_f950');
        
         page.keyboard.press('Enter');
        
-        wait_2_segundos();
+        await new Promise(resolve => setTimeout(resolve, 2000));
 
         try {
           
@@ -91,75 +92,78 @@ const XLSX = require('xlsx');
             const campo_quantidade = 'input[name="quantidade."]';
             const campo_confirmacao = 'input[name="confirma."]';
 
+            page.on('dialog', async dialog => {
+                console.log(dialog.message());
+                if (dialog.message() === 'ATENÇÃO! Produto não cadastrado.') {
+                    console.log('Ocorreu um erro. Item com problema: ');
+                    await dialog.accept();
+                    process.exit(0);
+                    // console.log('pulando para a próxima posição...');
+                    // await new Promise(resolve => setTimeout(resolve, 4000));       
+                    // page.keyboard.press('F8');
+                    // return;
+                };                
+                console.log('dialogo aceito');
+                await dialog.accept();
+            });
+            
+
             for( let i = 0; i < dados.length; i++){
                 const item = dados[i];
                 
-                page.on('dialog', async dialog => {
-                    console.log(dialog.message());
-                    if (dialog.message() === 'ATENÇÃO! Produto não cadastrado.') {
-                        console.log('Ocorreu um erro. Item com problema: ', dados[i]);
-                        await dialog.accept();
-                        console.log('pulando para a próxima posição...');
-                        page.keyboard.press('F8');
-                        return;
-                    };                
-                    console.log('dialogo aceito');
-                    await dialog.accept();
-                });
-                
                 waitForOverlayToDisappear(page);
-                wait_2_segundos();
+                await new Promise(resolve => setTimeout(resolve, 2000));
                 
                 console.log('--------------------------------------------------');
                 console.log(item.Nivel);
                 await page.type(campo_nivel, String(item.Nivel));
                 page.keyboard.press('Enter');
-                wait_2_segundos();
+                await new Promise(resolve => setTimeout(resolve, 2000));
                 waitForOverlayToDisappear(page);
                 
                 console.log(item.Grupo);
                 await page.type(campo_grupo, String(item.Grupo));
                 page.keyboard.press('Enter');
-                wait_2_segundos();
+                await new Promise(resolve => setTimeout(resolve, 2000));
                 waitForOverlayToDisappear(page);
                
                 console.log(item.Subgrupo);
                 await page.type(campo_subgrupo, String(item.Subgrupo));
                 page.keyboard.press('Enter');
-                wait_2_segundos();
+                await new Promise(resolve => setTimeout(resolve, 2000));
                 waitForOverlayToDisappear(page);
 
                 console.log(item.Item);
                 await page.type(campo_item, String(item.Item));
                 page.keyboard.press('Enter');
-                wait_2_segundos();
+                await new Promise(resolve => setTimeout(resolve, 2000));
                 waitForOverlayToDisappear(page);
 
                 console.log(item.Deposito);
                 await page.type(campo_deposito, String(item.Deposito));
                 page.keyboard.press('Enter');
-                wait_2_segundos();
+                await new Promise(resolve => setTimeout(resolve, 2000));
                 waitForOverlayToDisappear(page);
 
                 console.log(item.Lote);
                 await page.type(campo_lote, String(item.Lote));
                 page.keyboard.press('Enter');
-                wait_2_segundos();
+                await new Promise(resolve => setTimeout(resolve, 2000));
                 waitForOverlayToDisappear(page);
 
                 console.log('Quantidade: ', item.Quantidade);
                 await page.type(campo_quantidade, String(item.Quantidade));
                 page.keyboard.press('Enter');
-                wait_2_segundos();
+                await new Promise(resolve => setTimeout(resolve, 2000));
                 waitForOverlayToDisappear(page);
 
                 console.log(item.Confirmacao);
                 await page.type(campo_confirmacao, 'S');
                 page.keyboard.press('Enter');
-                wait_2_segundos();
+                await new Promise(resolve => setTimeout(resolve, 2000));
             }
 
-            process.exit(0);
+            // process.exit(0);
         } catch (error) {
             console.error('Erro ao inserir o valor ', error);
         }
