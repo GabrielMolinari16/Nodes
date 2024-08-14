@@ -43,7 +43,7 @@ async function setaLogin(page){
 
 async function Atualiza_estoque_deposito_1() {
 
-    const localArquivo = '../Codigos.xlsx';
+    localArquivo = '../Codigos.xlsx';
     GetDadosTabela(localArquivo)
     
     const dados = GetDadosTabela(localArquivo);
@@ -72,7 +72,7 @@ async function Atualiza_estoque_deposito_1() {
     await page.keyboard.type('estq_f010');
     
     page.keyboard.press('Enter');
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise(resolve => setTimeout(resolve, 4000));
 
     try {
         
@@ -83,23 +83,28 @@ async function Atualiza_estoque_deposito_1() {
 
         // page.on('dialog', async dialog => {
         //     console.log(dialog.message());                
-        //     console.log('dialogo aceito');
+            // console.log('dialogo aceito');
         //     await dialog.accept();
         // });
-
         await page.type(codigo_transacao, '003');
-        page.keyboard.press('Enter');
+        console.log('inserido valor 003');
         await new Promise(resolve => setTimeout(resolve, 2000));
+        page.keyboard.press('Enter');
+        console.log('pressionado Enter');
         waitForOverlayToDisappear(page);
         
+        console.log('inserido valor 001');
         await page.type(deposito_saida, '001');
-        page.keyboard.press('Enter');
         await new Promise(resolve => setTimeout(resolve, 2000));
+        page.keyboard.press('Enter');
+        console.log('pressionado Enter');
         waitForOverlayToDisappear(page);
         
         page.keyboard.press('F2');
+        console.log('pressionado F2');
         await new Promise(resolve => setTimeout(resolve, 2000));
         page.keyboard.press('F2');
+        console.log('pressionado F2');
 
 
         for( let i = 0; i < dados.length; i++){
