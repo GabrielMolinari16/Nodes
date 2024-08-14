@@ -18,6 +18,10 @@ const XLSX = require('xlsx');
         }
     }
 
+    async function wait_2_segundos(){
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+
     async function setaLogin(page){
         const usernameSelector = 'input[name="box1:usuario_tela."]';
         await page.waitForSelector(usernameSelector);
@@ -27,7 +31,7 @@ const XLSX = require('xlsx');
         await page.waitForSelector(passwordSelector);
         await page.type(passwordSelector, 'matteus');
         
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        wait_2_segundos();
 
         await page.keyboard.press('F9');
         }
@@ -51,7 +55,6 @@ const XLSX = require('xlsx');
 
         const opcoesInicio = { headless: false, args: ['--start-maximized'] };
          
-        
         console.log('Iniciando Puppeteer com as opções:', opcoesInicio);
         const browser = await puppeteer.launch(opcoesInicio);
         const page = await browser.newPage();
@@ -63,19 +66,19 @@ const XLSX = require('xlsx');
         fileURL =  `https://divero.systextil.com.br/systextil/`;
         await page.goto(fileURL);
 
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        wait_2_segundos();
         
         await setaLogin(page);
         
         await waitForOverlayToDisappear(page);
 
-        await new Promise(resolve => setTimeout(resolve, 2000));       
+        wait_2_segundos();       
        
         await page.keyboard.type('estq_f950');
        
         page.keyboard.press('Enter');
        
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        wait_2_segundos();
 
         try {
           
@@ -88,72 +91,72 @@ const XLSX = require('xlsx');
             const campo_quantidade = 'input[name="quantidade."]';
             const campo_confirmacao = 'input[name="confirma."]';
 
-            page.on('dialog', async dialog => {
-                console.log(dialog.message());
-                if (dialog.message() === 'ATENÇÃO! Produto não cadastrado.') {
-                    console.log('Ocorreu um erro. Interrompendo a execução do codigo');
-                    process.exit(1); // aqui o processo fecha a janela e tudo mas mantem o cmd
-                                     // pesquisar como apenas pausar para nao fechar o navegador
-                };
-
-                
-                console.log('dialogo aceito');
-                await dialog.accept();
-            });
-
             for( let i = 0; i < dados.length; i++){
                 const item = dados[i];
                 
+                page.on('dialog', async dialog => {
+                    console.log(dialog.message());
+                    if (dialog.message() === 'ATENÇÃO! Produto não cadastrado.') {
+                        console.log('Ocorreu um erro. Item com problema: ', dados[i]);
+                        await dialog.accept();
+                        console.log('pulando para a próxima posição...');
+                        page.keyboard.press('F8');
+                        return;
+                    };                
+                    console.log('dialogo aceito');
+                    await dialog.accept();
+                });
+                
                 waitForOverlayToDisappear(page);
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                wait_2_segundos();
                 
                 console.log('--------------------------------------------------');
-                //console.log(item.Nivel);
+                console.log(item.Nivel);
                 await page.type(campo_nivel, String(item.Nivel));
                 page.keyboard.press('Enter');
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                wait_2_segundos();
                 waitForOverlayToDisappear(page);
                 
                 console.log(item.Grupo);
                 await page.type(campo_grupo, String(item.Grupo));
                 page.keyboard.press('Enter');
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                wait_2_segundos();
                 waitForOverlayToDisappear(page);
                
-                //console.log(item.Subgrupo);
+                console.log(item.Subgrupo);
                 await page.type(campo_subgrupo, String(item.Subgrupo));
                 page.keyboard.press('Enter');
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                wait_2_segundos();
                 waitForOverlayToDisappear(page);
 
                 console.log(item.Item);
                 await page.type(campo_item, String(item.Item));
                 page.keyboard.press('Enter');
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                wait_2_segundos();
                 waitForOverlayToDisappear(page);
 
-                //console.log(item.Deposito);
+                console.log(item.Deposito);
                 await page.type(campo_deposito, String(item.Deposito));
                 page.keyboard.press('Enter');
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                wait_2_segundos();
                 waitForOverlayToDisappear(page);
 
-                //console.log(item.Lote);
+                console.log(item.Lote);
                 await page.type(campo_lote, String(item.Lote));
                 page.keyboard.press('Enter');
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                wait_2_segundos();
                 waitForOverlayToDisappear(page);
 
                 console.log('Quantidade: ', item.Quantidade);
                 await page.type(campo_quantidade, String(item.Quantidade));
                 page.keyboard.press('Enter');
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                wait_2_segundos();
                 waitForOverlayToDisappear(page);
 
-               // console.log(item.Confirmacao);
+                console.log(item.Confirmacao);
                 await page.type(campo_confirmacao, 'S');
                 page.keyboard.press('Enter');
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                wait_2_segundos();
             }
 
             process.exit(0);
