@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
+const XLSX = require('xlsx');
 
 
 async function waitForOverlayToDisappear(page) {
@@ -73,7 +74,6 @@ async function Atualiza_estoque_deposito_1() {
     
     page.keyboard.press('Enter');
     await new Promise(resolve => setTimeout(resolve, 2000));
-    page.keyboard.press('Enter');
 
     try {
         

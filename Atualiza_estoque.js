@@ -106,7 +106,7 @@ const XLSX = require('xlsx');
                 
                 waitForOverlayToDisappear(page);
                 await new Promise(resolve => setTimeout(resolve, 2000));
-            
+                
                 console.log('--------------------------------------------------');
                 //console.log(item.Nivel);
                 await page.type(campo_nivel, String(item.Nivel));
