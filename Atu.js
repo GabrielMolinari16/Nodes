@@ -43,7 +43,7 @@ async function setaLogin(page){
 
 async function Atualiza_estoque_deposito_1() {
 
-    localArquivo = '../Codigos.xlsx';
+    const localArquivo = '../Codigos.xlsx';
     GetDadosTabela(localArquivo)
     
     const dados = GetDadosTabela(localArquivo);
@@ -131,7 +131,7 @@ async function Atualiza_estoque_deposito_1() {
         // process.exit(0);
 
     } catch (error) {
-        console.error('Erro ao inserir o valor ', error);
+        console.error('Erro ao inserir o valor ', error.message);
     }
 
 }
