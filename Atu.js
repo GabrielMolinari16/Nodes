@@ -71,8 +71,7 @@ const XLSX = require('xlsx');
         fileURL =  `https://divero.systextil.com.br/systextil/`;
         await page.goto(fileURL);
 
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        
+        await wait_a_moment(2);        
         await setaLogin(page);
         
         await waitForOverlayToDisappear(page);
@@ -83,8 +82,7 @@ const XLSX = require('xlsx');
        
         page.keyboard.press('Enter');
         
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        
+        await wait_a_moment(2);        
         page.keyboard.press('Enter');
 
         try {
@@ -95,7 +93,7 @@ const XLSX = require('xlsx');
             const campo_codigo_barras = 'input[name="codigo_barras."]';
 
             waitForOverlayToDisappear(page);
-            await new Promise(resolve => setTimeout(resolve, 5000));
+            await wait_a_moment(5);
 
             // console.log('--------------------------------------------------');
             // console.log(item1.Codigos);
@@ -104,25 +102,25 @@ const XLSX = require('xlsx');
             page.keyboard.press('Enter');
     
             waitForOverlayToDisappear(page);
-            await new Promise(resolve => setTimeout(resolve, 5000));
+            await wait_a_moment(5);
 
             // console.log('--------------------------------------------------');
             // console.log(item2.Codigos);
             await page.type(campo_deposito, '001');
             console.log('Valor 001 inserido');
             page.keyboard.press('Enter');
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            await wait_a_moment(2);        
             waitForOverlayToDisappear(page);
             
             page.keyboard.press('F2');
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            
+            await wait_a_moment(2);         
+
             await page.type(campo_documento, '5');
             page.keyboard.press('F9');
 
             page.keyboard.press('F2');
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            
+            await wait_a_moment(2);           
+
             codigosAlerta = new Array();
 
             page.on('dialog', async dialog => {
@@ -150,7 +148,7 @@ const XLSX = require('xlsx');
                 console.log(codigo_atual);
                 await page.type(campo_codigo_barras, String(codigo_atual));
                 page.keyboard.press('Enter');
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                await wait_a_moment(2);
                 waitForOverlayToDisappear(page);
                 
             }
