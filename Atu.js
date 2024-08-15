@@ -137,7 +137,7 @@ const XLSX = require('xlsx');
             // Criando a variével para salvar o código de barras atual do loop  
             let codigo_atual = null;
 
-            for( let i = 2; i < dados.length; i++){
+            for( let i = 0; i < dados.length; i++){
                 const item = dados[i];
                 codigo_atual = item.Codigos;
                 
