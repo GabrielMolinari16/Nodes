@@ -19,8 +19,9 @@ const XLSX = require('xlsx');
     }
 
     async function wait_a_moment(tempo) {
-        tempo_ok = tempo * 1000;
+       const tempo_ok = tempo * 1000;
         await new Promise(resolve => setTimeout(resolve, tempo_ok));
+        return;
     }
 
     async function setaLogin(page){
@@ -32,13 +33,13 @@ const XLSX = require('xlsx');
         await page.waitForSelector(passwordSelector);
         await page.type(passwordSelector, 'matteus');
         
-       wait_a_moment(5);
+       await wait_a_moment(1);
 
         await page.keyboard.press('F9');
         }
 
     function GetDadosTabela(Caminho_arquivo) {
-        const workbook = XLSX.readFile(localArquivo);
+        const workbook = XLSX.readFile(Caminho_arquivo);
         const sheetName = workbook.SheetNames[0];
         const sheet = workbook.Sheets[sheetName];
     
@@ -46,10 +47,14 @@ const XLSX = require('xlsx');
         return dados;
     }
 
+    async function salvaDadosArray(item) {
+        codigosAlerta.push(item);
+        return;
+    }
+
     async function AtualizaEstoque() {
 
         localArquivo = '../Codigos.xlsx';
-        GetDadosTabela(localArquivo)
         
         const dados = GetDadosTabela(localArquivo);
         console.log(dados);
@@ -86,33 +91,25 @@ const XLSX = require('xlsx');
           
             const campo_transacao = 'input[name="codigo_transacao."]';
             const campo_deposito = 'input[name="deposito_saida."]';
+            const campo_documento = 'input[name="nr_documento."]';
             const campo_codigo_barras = 'input[name="codigo_barras."]';
-            // const campo_item = 'input[name="item."]';
-            // const campo_deposito = 'input[name="cod_deposito."]';
-            // const campo_lote = 'input[name="lote."]';
-            // const campo_quantidade = 'input[name="quantidade."]';
-            // const campo_confirmacao = 'input[name="confirma."]';
-
-           
-            const item1 = dados[0];
-            const item2 = dados[1];
 
             waitForOverlayToDisappear(page);
             await new Promise(resolve => setTimeout(resolve, 5000));
 
-            console.log('--------------------------------------------------');
-            console.log(item1.Codigos);
-            await page.type(campo_transacao, String(item1.Codigos));
-            console.log('Valor inserido');
+            // console.log('--------------------------------------------------');
+            // console.log(item1.Codigos);
+            await page.type(campo_transacao, '003');
+            console.log('Valor 001 inserido');
             page.keyboard.press('Enter');
     
             waitForOverlayToDisappear(page);
             await new Promise(resolve => setTimeout(resolve, 5000));
 
-            console.log('--------------------------------------------------');
-            console.log(item2.Codigos);
-            await page.type(campo_deposito, String(item2.Codigos));
-            console.log('Valor inserido');
+            // console.log('--------------------------------------------------');
+            // console.log(item2.Codigos);
+            await page.type(campo_deposito, '001');
+            console.log('Valor 001 inserido');
             page.keyboard.press('Enter');
             await new Promise(resolve => setTimeout(resolve, 2000));
             waitForOverlayToDisappear(page);
@@ -120,48 +117,38 @@ const XLSX = require('xlsx');
             page.keyboard.press('F2');
             await new Promise(resolve => setTimeout(resolve, 2000));
             
+            await page.type(campo_documento, '5');
+            page.keyboard.press('F9');
+
             page.keyboard.press('F2');
             await new Promise(resolve => setTimeout(resolve, 2000));
-
-            page.on('dialog', async dialog => {
-                console.log(dialog.message());
-                if (dialog.message() === 'ATENÇÃO! Produto não cadastrado.') {
-                    console.log('Ocorreu um erro. Item com problema: ');
-                    await dialog.accept();
-                    // process.exit(0);
-                    console.log('pulando para a próxima posição...');
-                    await new Promise(resolve => setTimeout(resolve, 4000));       
-                    page.keyboard.press('F8');
-                    return;
-                };                
-                console.log('dialogo aceito');
-                await dialog.accept();
-            });
             
             codigosAlerta = new Array();
 
+            page.on('dialog', async dialog => {
+                console.log(dialog.message());
+                if (dialog.message() === 'ATENÇÃO! Código de barras inválido.') {
+                    console.log('Ocorreu um erro. Item com problema: ', codigo_atual);
+                    salvaDadosArray(codigo_atual);
+                    dialog.accept();
+                    return;
+                };                
+                // console.log('dialogo aceito');
+                // await dialog.accept();                                                                               
+            });
+            // Criando a variével para salvar o código de barras atual do loop  
+            let codigo_atual = null;
+
             for( let i = 2; i < dados.length; i++){
                 const item = dados[i];
-
-                page.on('dialog', async dialog => {
-                    console.log(dialog.message());
-                    if (dialog.message() === 'ATENÇÃO! Código de barras inválido.') {
-                        console.log('Ocorreu um erro. Item com problema: ', item.Codigos);
-                        codigosAlerta.push(item.Codigos);
-                        await dialog.accept();
-
-                        return;
-                    };                
-                    // console.log('dialogo aceito');
-                    // await dialog.accept();
-                });
+                codigo_atual = item.Codigos;
                 
                 waitForOverlayToDisappear(page);
                 await new Promise(resolve => setTimeout(resolve, 3000));
                 
                 console.log('--------------------------------------------------');
-                console.log(item.Codigos);
-                await page.type(campo_codigo_barras, String(item.Codigos));
+                console.log(codigo_atual);
+                await page.type(campo_codigo_barras, String(codigo_atual));
                 page.keyboard.press('Enter');
                 await new Promise(resolve => setTimeout(resolve, 2000));
                 waitForOverlayToDisappear(page);
@@ -174,7 +161,7 @@ const XLSX = require('xlsx');
                 console.log(codigo);
             }
 
-            console.log('Códigos com erro imopressos.');
+            console.log('Códigos com erro impressos.');
 
             // process.exit(0);
         } catch (error) {
