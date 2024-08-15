@@ -165,7 +165,7 @@ const XLSX = require('xlsx');
 
             // process.exit(0);
         } catch (error) {
-            console.error('Erro ao inserir o valor ', error);
+            console.error('Erro ao inserir o valor ', error.message);
         }
 
     }
