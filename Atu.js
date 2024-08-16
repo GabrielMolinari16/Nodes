@@ -37,7 +37,7 @@ const XLSX = require('xlsx');
 
         await page.keyboard.press('F9');
         }
-
+X
     function GetDadosTabela(Caminho_arquivo) {
         const workbook = XLSX.readFile(Caminho_arquivo);
         const sheetName = workbook.SheetNames[0];
@@ -131,7 +131,7 @@ const XLSX = require('xlsx');
 
             // console.log('--------------------------------------------------');
             // console.log(item2.Codigos);
-            await page.type(campo_deposito, '001');
+            await page.type(campo_deposito, '010');
             console.log('Valor 001 inserido');
             page.keyboard.press('Enter');
             await wait_a_moment(2);        
@@ -165,8 +165,7 @@ const XLSX = require('xlsx');
                 await page.type(campo_codigo_barras, String(codigo_atual));
                 page.keyboard.press('Enter');
                 await wait_a_moment(2);
-                waitForOverlayToDisappear(page);
-                
+                waitForOverlayToDisappear(page);                
             }
 
             for (let i = 0; i < codigosAlerta.length; i++) {
