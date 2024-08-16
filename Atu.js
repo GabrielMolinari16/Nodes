@@ -37,7 +37,7 @@ const XLSX = require('xlsx');
 
         await page.keyboard.press('F9');
         }
-X
+
     function GetDadosTabela(Caminho_arquivo) {
         const workbook = XLSX.readFile(Caminho_arquivo);
         const sheetName = workbook.SheetNames[0];
@@ -123,7 +123,7 @@ X
             // console.log('--------------------------------------------------');
             // console.log(item1.Codigos);
             await page.type(campo_transacao, '003');
-            console.log('Valor 001 inserido');
+            console.log('Valor 003 inserido');
             page.keyboard.press('Enter');
     
             waitForOverlayToDisappear(page);
@@ -132,7 +132,7 @@ X
             // console.log('--------------------------------------------------');
             // console.log(item2.Codigos);
             await page.type(campo_deposito, '010');
-            console.log('Valor 001 inserido');
+            console.log('Valor 010 inserido');
             page.keyboard.press('Enter');
             await wait_a_moment(2);        
             waitForOverlayToDisappear(page);
@@ -161,8 +161,8 @@ X
                 await wait_a_moment(3);
                 
                 console.log('--------------------------------------------------');
-                console.log(codigo_atual);
                 await page.type(campo_codigo_barras, String(codigo_atual));
+                console.log(codigo_atual);
                 page.keyboard.press('Enter');
                 await wait_a_moment(2);
                 waitForOverlayToDisappear(page);                
