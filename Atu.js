@@ -71,12 +71,37 @@ const XLSX = require('xlsx');
         fileURL =  `https://divero.systextil.com.br/systextil/`;
         await page.goto(fileURL);
 
+        page.on('dialog', async dialog => {
+            console.log(dialog.message());
+            message = dialog.message();
+
+            switch(message) {
+                
+                case 'ATENÇÃO! Código de barras inválido.':
+                
+                console.log('Ocorreu um erro. Item com problema: ', codigo_atual);
+                salvaDadosArray(codigo_atual);
+                dialog.accept();
+                return;
+
+                case 'O número de conexões simultâneas excedeu o limite do ambiente Systêxtil. Favor entrar em contato com seu time de tecnologia ou diretamente com a Systêxtil pelo e-mail comercial@systextil.com.br.':
+                
+                console.log('Sem usuários disponíveis no momento, fechando o programa.  ');
+                dialog.accept();
+                process.exit(0);
+
+            };                
+            // console.log('dialogo aceito');
+            // await dialog.accept();                                                                               
+        });
+
         await wait_a_moment(2);        
         await setaLogin(page);
         
         await waitForOverlayToDisappear(page);
-
-        await new Promise(resolve => setTimeout(resolve, 2000));       
+        
+        
+        await wait_a_moment(4);        
        
         await page.keyboard.type('estq_f010');
        
@@ -114,26 +139,17 @@ const XLSX = require('xlsx');
             
             page.keyboard.press('F2');
             await wait_a_moment(2);         
-
+            
             await page.type(campo_documento, '5');
             page.keyboard.press('F9');
+            
+            await wait_a_moment(2);         
 
             page.keyboard.press('F2');
             await wait_a_moment(2);           
 
             codigosAlerta = new Array();
 
-            page.on('dialog', async dialog => {
-                console.log(dialog.message());
-                if (dialog.message() === 'ATENÇÃO! Código de barras inválido.') {
-                    console.log('Ocorreu um erro. Item com problema: ', codigo_atual);
-                    salvaDadosArray(codigo_atual);
-                    dialog.accept();
-                    return;
-                };                
-                // console.log('dialogo aceito');
-                // await dialog.accept();                                                                               
-            });
             // Criando a variével para salvar o código de barras atual do loop  
             let codigo_atual = null;
 
@@ -142,7 +158,7 @@ const XLSX = require('xlsx');
                 codigo_atual = item.Codigos;
                 
                 waitForOverlayToDisappear(page);
-                await new Promise(resolve => setTimeout(resolve, 3000));
+                await wait_a_moment(3);
                 
                 console.log('--------------------------------------------------');
                 console.log(codigo_atual);
