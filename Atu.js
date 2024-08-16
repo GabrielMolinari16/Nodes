@@ -47,8 +47,23 @@ const XLSX = require('xlsx');
         return dados;
     }
 
-    async function salvaDadosArray(item) {
-        codigosAlerta.push(item);
+    async function salvaCodigoForaEstoque(item) {
+        codigosForaEstoque.push(item);
+        return;
+    }
+    
+    async function salvaCodigoEstoqueZero(item) {
+        codigosEstoqueZero.push(item);
+        return;
+    }
+
+    async function salvaCodigoFormatoInvalido(item) {
+        codigosFormatoInvalido.push(item);
+        return;
+    }
+   
+    async function salvaCodigosErrosNaoIdentificados(item) {
+        codigosFormatoInvalido.push(item);
         return;
     }
 
@@ -57,7 +72,7 @@ const XLSX = require('xlsx');
         localArquivo = '../Codigos.xlsx';
         
         const dados = GetDadosTabela(localArquivo);
-        console.log(dados);
+        // console.log(dados);
 
         const opcoesInicio = { headless: false, args: ['--start-maximized'] };
          
@@ -70,25 +85,41 @@ const XLSX = require('xlsx');
 
         fileURL =  `https://divero.systextil.com.br/systextil/`;
         await page.goto(fileURL);
+    
+        let codigo_atual = null;
 
         page.on('dialog', async dialog => {
             console.log(dialog.message());
             message = dialog.message();
 
             switch(message) {
+
+                case 'ATENÇÃO! A quantidade solicitada ultrapassou a quantidade disponível para o produto. Estoque Disponível: 0.0':
+                    salvaCodigoEstoqueZero(codigo_atual);
+                    dialog.accept();
+                    return;
+                
+                case 'ATENÇÃO! TAG está com situação 4 faturada ou fora de estoque  não pode ser movimentada.':
+                    salvaCodigoForaEstoque(codigo_atual);
+                    dialog.accept();
+                    return;
                 
                 case 'ATENÇÃO! Código de barras inválido.':
-                
-                console.log('Ocorreu um erro. Item com problema: ', codigo_atual);
-                salvaDadosArray(codigo_atual);
-                dialog.accept();
-                return;
+                    console.log('Ocorreu um erro. Item com problema: ', codigo_atual);
+                    salvaCodigoFormatoInvalido(codigo_atual);
+                    dialog.accept();
+                    return; 
 
                 case 'O número de conexões simultâneas excedeu o limite do ambiente Systêxtil. Favor entrar em contato com seu time de tecnologia ou diretamente com a Systêxtil pelo e-mail comercial@systextil.com.br.':
-                
-                console.log('Sem usuários disponíveis no momento, fechando o programa.  ');
-                dialog.accept();
-                process.exit(0);
+                    console.log('Sem usuários disponíveis no momento, fechando o programa.  ');
+                    dialog.accept();
+                    process.exit(0);
+                    break; 
+
+                default: 
+                    salvaCodigosErrosNaoIdentificados(codigo_atual);
+                    dialog.accept();
+                    return;
 
             };                
             // console.log('dialogo aceito');
@@ -109,7 +140,7 @@ const XLSX = require('xlsx');
         
         await wait_a_moment(2);        
         page.keyboard.press('Enter');
-
+        
         try {
           
             const campo_transacao = 'input[name="codigo_transacao."]';
@@ -148,29 +179,61 @@ const XLSX = require('xlsx');
             page.keyboard.press('F2');
             await wait_a_moment(2);           
 
-            codigosAlerta = new Array();
+            codigosEstoqueZero = new Array();
+            codigosFormatoInvalido = new Array();
+            codigosErrosNaoIdentificados = new Array();
+            codigosForaEstoque = new Array();
 
             // Criando a variével para salvar o código de barras atual do loop  
-            let codigo_atual = null;
 
             for( let i = 0; i < dados.length; i++){
                 const item = dados[i];
                 codigo_atual = item.Codigos;
                 
                 waitForOverlayToDisappear(page);
-                await wait_a_moment(3);
+                await wait_a_moment(2);
                 
                 console.log('--------------------------------------------------');
                 await page.type(campo_codigo_barras, String(codigo_atual));
                 console.log(codigo_atual);
+                console.log('Controle: ', i);
                 page.keyboard.press('Enter');
                 await wait_a_moment(2);
                 waitForOverlayToDisappear(page);                
             }
 
-            for (let i = 0; i < codigosAlerta.length; i++) {
-                const codigo = codigosAlerta[i];
+            console.log('Iniciando impressão dos códigos que geraram alerta: ');
+            console.log(' ');
+            
+            console.log('Códigos formato inválido : ----------------------------------');
+            
+            for (let i = 0; i < codigosFormatoInvalido.length; i++) {
+                const codigo = codigosFormatoInvalido[i];
                 
+                console.log(codigo);
+            }
+            
+            console.log(' ');
+            console.log('Códigos com estoque zerado: ----------------------------------');
+            
+            for (let i = 0; i < codigosEstoqueZero.length; i++) {
+                const codigo = codigosEstoqueZero[i];
+                console.log(codigo);
+            }
+           
+            console.log(' ');
+            console.log('Códigos fora do estoque ou com situação 4 faturada: ----------------------------------');
+            
+            for (let i = 0; i < codigosForaEstoque.length; i++) {
+                const codigo = codigosForaEstoque[i];
+                console.log(codigo);
+            }
+            
+            console.log(' ');
+            console.log('Códigos fora do estoque ou com situação 4 faturada: ----------------------------------');
+            
+            for (let i = 0; i < codigosErrosNaoIdentificados.length; i++) {
+                const codigo = codigosErrosNaoIdentificados[i];
                 console.log(codigo);
             }
 
