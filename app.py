@@ -8,10 +8,10 @@ app = tk.Tk()
 app.title("Aplicativo Local Simples")
 
 # Configurar a geometria da janela
-app.geometry("1080x1920")
+app.geometry("400x300")
 
 # Criar um botão e associar a função show_message
 button = tk.Button(app, text="Clique aqui", command=show_message)
-button.pack(pady=20)
+button.pack(pady=30)
 
 app.mainloop()
